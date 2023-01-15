@@ -9,7 +9,7 @@ app.listen(port, ()=>{
     console.log(`Listening on port ${port}`)
 })
 
-// app.get('/api', (req, res)=>{
-//     console.dir(req.protocol)
-//     res.send(`IP Address: ${req.ip}`)
-// })
+app.get('/api', (req, res)=>{
+    console.dir(req.protocol)
+    res.send(`IP Address: ${req.ip}`)
+})
