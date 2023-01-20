@@ -5,11 +5,11 @@ const port = 3000;
 
 app.use('/api', routes);
 
-app.listen(port, () => {
+app.listen(port, (): void => {
     console.log(`Listening on port ${port}`);
 });
 
-app.get('/api', (req, res) => {
+app.get('/api', (req, res): void => {
     console.dir(req.protocol);
     res.send(`IP Address: ${req.ip}`);
 });

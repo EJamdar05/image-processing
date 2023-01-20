@@ -5,7 +5,7 @@ import path = require('path');
 import sharp = require('sharp');
 const images = express.Router();
 
-images.get('/', logger, (req, res) => {
+images.get('/', logger, (req, res): void => {
     const fileName = req.query.filename as string; //filename parameter
     const width = req.query.width as string; //width parameter
     const height = req.query.height as string; //height parameter
@@ -22,7 +22,7 @@ images.get('/', logger, (req, res) => {
             height +
             '.' +
             fileArr[1]; //file extension
-        const resizedPath = path.join(__dirname, thumbFilePath); //getting relative path to current dir for thumbs
+        const resizedPath:string = path.join(__dirname, thumbFilePath); //getting relative path to current dir for thumbs
 
         //if the file exists, simply serve the content
         if (fs.existsSync(resizedPath)) {
@@ -48,12 +48,12 @@ images.get('/', logger, (req, res) => {
     }
 });
 
-async function resizeImage(
+const resizeImage = async (
     fileName: string,
     width: number,
     height: number,
     result: string,
-) {
+): Promise<void> => {
     try {
         const fullSizePath: string = '../../../public/assets/full/' + fileName; //getting the fullsized image path
         await sharp(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
@@ -65,6 +65,7 @@ async function resizeImage(
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export default images;
+module.exports = images;

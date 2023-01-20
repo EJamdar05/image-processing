@@ -81,30 +81,29 @@ images.get('/', logger_1.default, function (req, res) {
         res.send('Error: No image input was given or the parameters (width and height) are missing.');
     }
 });
-function resizeImage(fileName, width, height, result) {
-    return __awaiter(this, void 0, void 0, function () {
-        var fullSizePath, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    fullSizePath = '../../../public/assets/full/' + fileName;
-                    return [4 /*yield*/, sharp(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
-                            .resize({
-                            width: width,
-                            height: height,
-                        })
-                            .toFile(path.join(__dirname, result))];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_1 = _a.sent();
-                    console.log(error_1);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+var resizeImage = function (fileName, width, height, result) { return __awaiter(void 0, void 0, void 0, function () {
+    var fullSizePath, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                fullSizePath = '../../../public/assets/full/' + fileName;
+                return [4 /*yield*/, sharp(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
+                        .resize({
+                        width: width,
+                        height: height,
+                    })
+                        .toFile(path.join(__dirname, result))];
+            case 1:
+                _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log(error_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
-}
+}); };
 exports.default = images;
+module.exports = images;
