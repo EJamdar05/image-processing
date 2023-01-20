@@ -4,7 +4,6 @@ import fs = require('fs');
 import path = require('path');
 import sharp = require('sharp');
 const images = express.Router();
-
 images.get('/', logger, (req, res): void => {
     const fileName = req.query.filename as string; //filename parameter
     const width = req.query.width as string; //width parameter
@@ -22,7 +21,7 @@ images.get('/', logger, (req, res): void => {
             height +
             '.' +
             fileArr[1]; //file extension
-        const resizedPath:string = path.join(__dirname, thumbFilePath); //getting relative path to current dir for thumbs
+        const resizedPath: string = path.join(__dirname, thumbFilePath); //getting relative path to current dir for thumbs
 
         //if the file exists, simply serve the content
         if (fs.existsSync(resizedPath)) {
@@ -48,7 +47,7 @@ images.get('/', logger, (req, res): void => {
     }
 });
 
-const resizeImage = async (
+export const resizeImage = async (
     fileName: string,
     width: number,
     height: number,
@@ -68,4 +67,4 @@ const resizeImage = async (
 };
 
 export default images;
-module.exports = images;
+(module.exports = images), resizeImage;

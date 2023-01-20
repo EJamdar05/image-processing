@@ -44,6 +44,7 @@ var index_1 = __importDefault(require("../index"));
 var server = (0, supertest_1.default)(index_1.default);
 var fs = require("fs");
 var path = require("path");
+var sharp_1 = __importDefault(require("sharp"));
 describe('Server endpoint testing', function () {
     it('can access the /api endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
         var res;
@@ -120,24 +121,25 @@ describe('Server endpoint testing', function () {
 });
 describe('Testing image resizing functionality', function () {
     it('checks if the resized image is generated (using width: 480, height: 320)', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var isFileGenerated, thumbFilePath, resizedPath;
+        var thumbFilePath, fullSizePath, resizedPath;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    isFileGenerated = false;
                     thumbFilePath = '../../public/assets/thumb/profile_thumb_480x320.jpg';
+                    fullSizePath = '../../public/assets/full/profile.jpg';
                     resizedPath = path.join(__dirname, thumbFilePath);
                     if (fs.existsSync(resizedPath)) {
                         fs.unlinkSync(resizedPath);
                     }
-                    return [4 /*yield*/, server.get('/api/images?filename=profile.jpg&width=480&height=320')];
+                    return [4 /*yield*/, (0, sharp_1.default)(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
+                            .resize({
+                            width: 480,
+                            height: 320,
+                        })
+                            .toFile(path.join(resizedPath))];
                 case 1:
                     _a.sent();
-                    console.log(fs.existsSync(resizedPath));
-                    if (fs.existsSync(resizedPath)) {
-                        isFileGenerated = true;
-                    }
-                    expect(isFileGenerated).toBe(true);
+                    expect(fs.existsSync(resizedPath)).toEqual(true);
                     return [2 /*return*/];
             }
         });

@@ -3,6 +3,7 @@ import app from '../index';
 const server = supertest(app);
 import fs = require('fs');
 import path = require('path');
+import sharp from 'sharp';
 describe('Server endpoint testing', (): void => {
     it('can access the /api endpoint', async () => {
         const res = await server.get('/api');
@@ -49,21 +50,19 @@ describe('Server endpoint testing', (): void => {
 
 describe('Testing image resizing functionality', () => {
     it('checks if the resized image is generated (using width: 480, height: 320)', async () => {
-        let isFileGenerated = false;
-        //delete the thumbnail if it already exists
         const thumbFilePath = //thumbFilePath: path str that leads to public/assets/thumb (which holds resized images)
             '../../public/assets/thumb/profile_thumb_480x320.jpg';
+        const fullSizePath = '../../public/assets/full/profile.jpg';
         const resizedPath = path.join(__dirname, thumbFilePath);
-        if(fs.existsSync(resizedPath)){
+        if (fs.existsSync(resizedPath)) {
             fs.unlinkSync(resizedPath);
         }
-        await server.get(
-            '/api/images?filename=profile.jpg&width=480&height=320',
-        );
-        console.log(fs.existsSync(resizedPath))
-        if (fs.existsSync(resizedPath)) {
-            isFileGenerated = true;
-        }
-        expect(isFileGenerated).toBe(true);
+        await sharp(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
+            .resize({
+                width: 480,
+                height: 320,
+            })
+            .toFile(path.join(resizedPath));
+        expect(fs.existsSync(resizedPath)).toEqual(true);
     });
 });

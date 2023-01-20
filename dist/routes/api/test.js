@@ -39,64 +39,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resizeImage = void 0;
-var express_1 = __importDefault(require("express"));
-var logger_1 = __importDefault(require("../../utilities/logger"));
-var fs = require("fs");
-var path = require("path");
-var sharp = require("sharp");
-var images = express_1.default.Router();
-images.get('/', logger_1.default, function (req, res) {
-    var fileName = req.query.filename; //filename parameter
-    var width = req.query.width; //width parameter
-    var height = req.query.height; //height parameter
-    if (fileName && width && height) {
-        //if all the fields contain values, then proceed
-        var fileArr = fileName.split('.'); //spliting needed to rename the file
-        var thumbFilePath = //thumbFilePath: path str that leads to public/assets/thumb (which holds resized images)
-         '../../../public/assets/thumb/' + //thumbnail filename ex: profile_thumb_20x20.jpg
-            fileArr[0] + //fileName
-            '_thumb_' +
-            width +
-            'x' +
-            height +
-            '.' +
-            fileArr[1]; //file extension
-        var resizedPath = path.join(__dirname, thumbFilePath); //getting relative path to current dir for thumbs
-        //if the file exists, simply serve the content
-        if (fs.existsSync(resizedPath)) {
-            res.sendFile(resizedPath);
-        }
-        else {
-            try {
-                (0, exports.resizeImage)(fileName, parseInt(width), parseInt(height), thumbFilePath); //resizeImage deals with sharp logic
-                res.sendFile(resizedPath);
-            }
-            catch (error) {
-                res.send(error);
-            }
-        }
-    }
-    else {
-        //line is executed when parameters to url are invalid
-        res.send('Error: No image input was given or the parameters (width and height) are missing.');
-    }
-});
+var path_1 = __importDefault(require("path"));
+var sharp_1 = __importDefault(require("sharp"));
 var resizeImage = function (fileName, width, height, result) { return __awaiter(void 0, void 0, void 0, function () {
     var fullSizePath, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
+                console.log("enter");
                 fullSizePath = '../../../public/assets/full/' + fileName;
-                return [4 /*yield*/, sharp(path.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
+                console.log(path_1.default.join(__dirname, fullSizePath));
+                return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(__dirname, fullSizePath)) //await req for resizing image via sharp module and making new file
                         .resize({
                         width: width,
                         height: height,
                     })
-                        .toFile(path.join(__dirname, result))];
+                        .toFile(path_1.default.join(__dirname, result))];
             case 1:
                 _a.sent();
+                console.log("done");
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
@@ -107,5 +69,3 @@ var resizeImage = function (fileName, width, height, result) { return __awaiter(
     });
 }); };
 exports.resizeImage = resizeImage;
-exports.default = images;
-(module.exports = images), exports.resizeImage;
